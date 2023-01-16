@@ -6,6 +6,8 @@ correct_letters = []
 wrong_letters = []
 separator = "|"
 
+# Test comment for git-source-control
+
 
 def choose_word(filename):
     """Opens the words.txt and chooses a random word for the game."""
