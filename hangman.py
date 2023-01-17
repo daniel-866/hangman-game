@@ -1,22 +1,27 @@
 from random import choice
 
-words = []
-# There will be multiple files, different word groups
-filename = "words.txt"
+# TODO add counter of correct words
+
+animals_set = []
+countries_set = []
+food_set = []
 correct_letters = []
 wrong_letters = []
-guessed_words = []
-
-# Opens the words.txt and populates 'words' list.
-with open(filename, "r") as f:
-    word_list = f.readlines()
-    for i in word_list:
-        words.append(i.lower().strip("\n"))
+wins = 0
 
 
-def choose_word(word_group):
+def get_wordset(filename, word_set):
+    """Opens the wordset .txt and imports data to a list of words"""
+    with open(filename, "r") as f:
+        word_list = f.readlines()
+        for i in word_list:
+            word_set.append(i.lower().strip("\n"))
+    return word_set
+
+
+def choose_word(word_set):
     """Chooses a random word for the game, that wasn't guessed correctly yet."""
-    chosen_word = choice(words)
+    chosen_word = choice(word_set)
     return chosen_word
 
 
@@ -30,6 +35,23 @@ def check_guess(chosen_word, guess):
             print(letter, end="|")
         else:
             print("_", end="|")
+
+
+def set_word_group():
+    """Sets word group to play with"""
+    while True:
+        choice = input("Choose word group:\n1)Animals\n2)Countries\n3)Food\n> ")
+        if choice == "quit":
+            exit()
+        elif choice == "1":
+            return get_wordset("animals.txt", animals_set)
+        elif choice == "2":
+            return get_wordset("countries.txt", countries_set)
+        elif choice == "3":
+            return get_wordset("food.txt", food_set)
+        else:
+            print("Enter a valid option.")
+            continue
 
 
 def set_difficulty():
@@ -57,21 +79,25 @@ def set_difficulty():
 # Game starts
 while True:
     print("Enter 'quit' at any time to end the game.")
+    if wins > 0:
+        print(f"You have {wins} correct words!")
+    # Set word group to play with
+    chosen_set = set_word_group()
     # Set difficulty level (amount of tries)
     tries = set_difficulty()
     # Reset tried letters
     wrong_letters.clear()
     correct_letters.clear()
-    # Randomly selects a word from word_list
-    chosen_word = choose_word(filename)
+    # Randomly selects a word from word_set
+    chosen_word = choose_word(chosen_set)
 
     # Start of round
     while tries > 0:
         # Checks if entire word had already been entered before tries ran out.
         if len(correct_letters) == len(chosen_word):
             print("\nYou win!\n")
-            # guessed_words.append(chosen_word)
-            words.remove(chosen_word)
+            chosen_set.remove(chosen_word)
+            wins += 1
             break
         elif not len(correct_letters) and not len(wrong_letters):
             check_guess(chosen_word, "")
