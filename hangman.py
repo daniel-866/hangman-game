@@ -1,6 +1,6 @@
 from random import choice
 
-tries = 6
+# tries = 6
 filename = "words.txt"
 correct_letters = []
 wrong_letters = []
@@ -28,36 +28,51 @@ def check_guess(chosen_word, guess):
             print("_", end="|")
 
 
+def set_difficulty():
+    """Sets game difficulty, Easy, Normal, Hard"""
+    difficulty = input("Choose game difficulty:\n1)Easy\n2)Normal\n3)Hard\n> ").lower()
+    if difficulty == "1" or difficulty == "e" or difficulty == "easy":
+        tries = 10
+    elif difficulty == "2" or difficulty == "n" or difficulty == "normal":
+        tries = 6
+    elif difficulty == "3" or difficulty == "h" or difficulty == "hard":
+        tries = 6
+    return tries
+
+
 # Randomly selects a word from word_list
 chosen_word = choose_word(filename)
 
-# Game loop
-while tries > 0:
-    # Checks if entire word had already been entered before tries ran out.
-    if len(correct_letters) == len(chosen_word):
-        print("You win!")
-        break
-    elif not len(correct_letters) and not len(wrong_letters):
-        check_guess(chosen_word, "")
-
-    print(f"\nTries left: {tries}")
-    # Assign user input to variable guess
-    guess = input("Guess a letter: ").lower()
-    if len(guess) > 1 or guess.isalpha() != True:
-        print("ONLY ONE LETTER IS ALLOWED!")
-        continue
-
-    if guess in correct_letters or guess in wrong_letters:
-        print("You already used this letter.")
-        check_guess(chosen_word, guess)
-        continue
-
-    if guess not in chosen_word:
-        wrong_letters.append(guess)
-        tries -= 1
-        if tries == 0:
-            print(f"\nYou lose!\nit was {chosen_word}")
+while True:
+    # Set difficulty level (amount of tries)
+    tries = set_difficulty()
+    # Round loop
+    while tries > 0:
+        # Checks if entire word had already been entered before tries ran out.
+        if len(correct_letters) == len(chosen_word):
+            print("You win!")
             break
+        elif not len(correct_letters) and not len(wrong_letters):
+            check_guess(chosen_word, "")
+
+        print(f"\nTries left: {tries}")
+        # Assign user input to variable guess
+        guess = input("Guess a letter: ").lower()
+        if len(guess) > 1 or guess.isalpha() != True:
+            print("ONLY ONE LETTER IS ALLOWED!")
+            continue
+
+        if guess in correct_letters or guess in wrong_letters:
+            print("You already used this letter.")
+            check_guess(chosen_word, guess)
+            continue
+
+        if guess not in chosen_word:
+            wrong_letters.append(guess)
+            tries -= 1
+            if tries == 0:
+                print(f"\nYou lose!\nit was {chosen_word}")
+                break
+            check_guess(chosen_word, guess)
+            continue
         check_guess(chosen_word, guess)
-        continue
-    check_guess(chosen_word, guess)
