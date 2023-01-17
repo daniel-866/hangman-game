@@ -4,9 +4,8 @@ tries = 6
 filename = "words.txt"
 correct_letters = []
 wrong_letters = []
-separator = "|"
 
-# Test comment for git-source-control
+# 3: add a list of used words, to not repeat
 
 
 def choose_word(filename):
@@ -29,27 +28,19 @@ def check_guess(chosen_word, guess):
             print("_", end="|")
 
 
-# TODO
-# 1: refactor code into functions
-# 3: add a list of used words, to not repeat
-# 4: print the _|_|_|_| per word before tries
-
 # Randomly selects a word from word_list
-
 chosen_word = choose_word(filename)
-word_blanks = "_" * len(chosen_word)
-word_blanks = separator.join(word_blanks)
-
-print(word_blanks)
-
 
 # Game loop
 while tries > 0:
-    print(f"\nTries left: {tries}")
-    # Checks if entire word has been entered before tries ran out.
+    # Checks if entire word had already been entered before tries ran out.
     if len(correct_letters) == len(chosen_word):
         print("You win!")
         break
+    elif not len(correct_letters) and not len(wrong_letters):
+        check_guess(chosen_word, "")
+
+    print(f"\nTries left: {tries}")
     # Assign user input to variable guess
     guess = input("Guess a letter: ").lower()
     if len(guess) > 1 or guess.isalpha() != True:
@@ -65,9 +56,8 @@ while tries > 0:
         wrong_letters.append(guess)
         tries -= 1
         if tries == 0:
-            print(f"You lose!\nit was {chosen_word}")
+            print(f"\nYou lose!\nit was {chosen_word}")
             break
         check_guess(chosen_word, guess)
         continue
     check_guess(chosen_word, guess)
-    print(" ")
