@@ -1,6 +1,6 @@
 from random import choice
 
-# TODO add counter of correct words
+# TODO
 
 animals_set = []
 countries_set = []
